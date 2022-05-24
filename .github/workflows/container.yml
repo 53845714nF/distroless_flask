@@ -28,6 +28,6 @@ jobs:
         id: push-to-ghcr
         uses: redhat-actions/push-to-registry@v2
         with:
-          image: $IMAGE_NAME
+          image: podman-flask
           tags: latest
           registry: ${{ env.REGISTRY }}
