@@ -1,0 +1,35 @@
+name: Build Podman Flask container
+on:
+  - push
+
+jobs:
+  build:
+    name: Build image
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: podman-flask
+      REGISTRY: ghcr.io/53845714nF
+    steps:
+
+      - name: Clone the repository
+        uses: actions/checkout@v3
+
+      - name: Build Container image
+        run: |
+          apt install podman
+          podman build . --file Containerfile --tag latest ${{ github.sha }}
+
+      - name: Log in to the GitHub Container registry
+        uses: redhat-actions/podman-login@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push to GitHub Container Repository
+        id: push-to-ghcr
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ steps.build-image.outputs.image }}
+          tags: ${{ steps.build-image.outputs.tags }}
+          registry: ${{ env.REGISTRY }}
