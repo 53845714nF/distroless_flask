@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: "podman-flask"
-      REGISTRY: "ghcr.io/53845714nF"
+      REGISTRY: "ghcr.io/53845714nf"
     steps:
 
       - name: Clone the repository
