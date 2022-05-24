@@ -7,15 +7,15 @@ jobs:
     name: Build image
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: podman-flask
-      REGISTRY: ghcr.io/53845714nF
+      IMAGE_NAME: "podman-flask"
+      REGISTRY: "ghcr.io/53845714nF"
     steps:
 
       - name: Clone the repository
         uses: actions/checkout@v3
 
       - name: Build Container image
-        run: sudo podman build . --file Containerfile --tag ${{ github.sha }}
+        run: podman build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7) --file Containerfile .
 
       - name: Log in to the GitHub Container registry
         uses: redhat-actions/podman-login@v1
