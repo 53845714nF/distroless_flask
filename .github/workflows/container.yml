@@ -16,8 +16,8 @@ jobs:
 
       - name: Build Container image
         run: |
-          apt install podman
-          podman build . --file Containerfile --tag latest ${{ github.sha }}
+          sudo apt install -y podman
+          sudo podman build . --file Containerfile --tag latest ${{ github.sha }}
 
       - name: Log in to the GitHub Container registry
         uses: redhat-actions/podman-login@v1
