@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build Container image
-        run: sudo podman build . --file Containerfile --tag latest ${{ github.sha }}
+        run: sudo podman build . --file Containerfile --tag ${{ github.sha }}
 
       - name: Log in to the GitHub Container registry
         uses: redhat-actions/podman-login@v1
