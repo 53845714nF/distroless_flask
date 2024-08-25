@@ -1,33 +1,34 @@
 name: Build Podman Flask container
 on:
-  - push
+  pull_request:
+  push:
+  workflow_dispatch:
 
 jobs:
   build:
-    name: Build image
+    name: Build Images
     runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: "podman-flask"
-      REGISTRY: "ghcr.io/53845714nf"
+    permissions:
+      contents: read
+      packages: write
+
     steps:
+    - uses: actions/checkout@v4
 
-      - name: Clone the repository
-        uses: actions/checkout@v3
+    - name: Buildah Action
+      id: build_image
+      uses: redhat-actions/buildah-build@v2
+      with:
+        image: ghcr.io/distroless_flask
+        oci: true
+        context: ./
+        containerfiles: |
+          ./Containerfile
 
-      - name: Build Container image
-        run: podman build -t $IMAGE_NAME --file Containerfile .
-
-      - name: Log in to the GitHub Container registry
-        uses: redhat-actions/podman-login@v1
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Push to GitHub Container Repository
-        id: push-to-ghcr
-        uses: redhat-actions/push-to-registry@v2
-        with:
-          image: podman-flask
-          tags: latest
-          registry: ${{ env.REGISTRY }}
+    - name: Push Image to GitHub Container Registry
+      uses: redhat-actions/push-to-registry@v2
+      with:
+        image: ${{ steps.build_image.outputs.image }}
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}

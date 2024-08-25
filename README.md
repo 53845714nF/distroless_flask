@@ -1,3 +1,4 @@
-# podman_test
+# distroless_flask
 
-A little fun with podman inspired by [ubi-flask](https://github.com/major/ubi-flask).
+Example repo with flask inside a Distroless container build with buildah.
+This Project is inspired by [ubi-flask](https://github.com/major/ubi-flask).
