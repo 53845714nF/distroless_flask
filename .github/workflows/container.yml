@@ -22,7 +22,7 @@ jobs:
       id: build_image
       uses: redhat-actions/buildah-build@v2
       with:
-        image: ghcr.io/distroless_flask
+        image: ghcr.io/${{ github.repository }}/distroless_flask
         oci: true
         context: ./
         containerfiles: |
