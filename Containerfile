@@ -9,7 +9,7 @@ FROM build AS build-env
 COPY requirements.txt ./
 RUN /venv/bin/pip install --disable-pip-version-check -r requirements.txt --target /packages
 
-FROM gcr.io/distroless/python3-debian12
+FROM gcr.io/distroless/python3-debian12:nonroot
 USER 1001:1001
 WORKDIR /app
 COPY --from=build-env /packages /packages
